@@ -6,7 +6,7 @@ proj_utm = Proj(proj='utm', zone=22, south=True, ellps='WGS84')  # Substitua 22 
 proj_wgs84 = Proj(proj='latlong', datum='WGS84')
 
 # Abrir o arquivo original e criar um novo arquivo para os resultados
-with open('coords.csv', mode='r', encoding='utf-8', newline='') as infile, open('coords_lat_lon.csv', mode='w', encoding='utf-8', newline='') as outfile:
+with open('../coords.csv', mode='r', encoding='utf-8', newline='') as infile, open('coords_lat_lon.csv', mode='w', encoding='utf-8', newline='') as outfile:
     reader = csv.DictReader(infile)
     fieldnames = reader.fieldnames + ['Latitude', 'Longitude']
     writer = csv.DictWriter(outfile, fieldnames=fieldnames)

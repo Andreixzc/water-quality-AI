@@ -38,6 +38,6 @@ def process_csv(input_file, output_file):
 
     print(f"Processed file saved:  {output_file}")
 
-input_file = 'Base_kinross.csv'
-output_file = 'Base_kinross_processed.csv'
+input_file = '../Base_kinross.csv'
+output_file = '../Base_kinross_processed.csv'
 process_csv(input_file, output_file)
