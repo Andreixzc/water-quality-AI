@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-file_path = '../Base_kinross_processed.csv'
+file_path = '../Base_kinross_all_parameters.csv'
 
 
 df = pd.read_csv(file_path)

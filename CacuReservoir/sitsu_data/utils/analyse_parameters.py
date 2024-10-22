@@ -4,7 +4,7 @@ import seaborn as sns
 import os
 
 # Create a directory to store the analysis results
-output_dir = "analysis_results"
+output_dir = "../sitsu_data_analysis"
 os.makedirs(output_dir, exist_ok=True)
 
 # Read the dataset
