@@ -14,7 +14,7 @@ Funcionalidade:
 3. Para cada ponto de amostra, busca a imagem de satélite mais próxima dentro de um intervalo de tempo.
 4. Extrai valores de bandas espectrais e calcula índices relevantes.
 5. Adiciona informações temporais (mês e estação) aos dados.
-6. Salva os dados processados em arquivos CSV para treinamento de modelos.
+6. Salva os dados processados em arquivos CSV para treinamento de modelos, incluindo apenas instâncias com imagens encontradas.
 """
 
 # Inicializar o Google Earth Engine
@@ -37,7 +37,7 @@ def extract_bands_and_indices(row):
         row (pd.Series): Uma linha do DataFrame contendo informações de um ponto de amostra.
     
     Returns:
-        pd.Series: Série com valores das bandas e índices calculados.
+        pd.Series: Série com valores das bandas e índices calculados, ou pd.Series com valores nulos se nenhuma imagem for encontrada.
     """
     point = ee.Geometry.Point(row['Longitude'], row['Latitude'])
     date = ee.Date(row['DATA'].strftime('%Y-%m-%d'))
@@ -80,16 +80,10 @@ def extract_bands_and_indices(row):
             })
         except Exception as e:
             print(f"Erro ao selecionar as bandas ou calcular índices para o ponto {row['PONTO']}: {e}")
-            return pd.Series({col: None for col in ['B2', 'B3', 'B4', 'B5', 'B8', 'B11', 
-                                                    'NDCI', 'NDVI', 'FAI', 'MNDWI', 
-                                                    'B3_B2_ratio', 'B4_B3_ratio', 'B5_B4_ratio',
-                                                    'Image_Date']})
+            return pd.Series({col: None for col in new_columns})
     else:
         print(f"Nenhuma imagem encontrada para o ponto {row['PONTO']} ({row['Latitude']}, {row['Longitude']}) no período de {start_date.format('YYYY-MM-dd').getInfo()} a {end_date.format('YYYY-MM-dd').getInfo()}")
-        return pd.Series({col: None for col in ['B2', 'B3', 'B4', 'B5', 'B8', 'B11', 
-                                                'NDCI', 'NDVI', 'FAI', 'MNDWI', 
-                                                'B3_B2_ratio', 'B4_B3_ratio', 'B5_B4_ratio',
-                                                'Image_Date']})
+        return pd.Series({col: None for col in new_columns})
 
 # Aplicar a função extract_bands_and_indices a cada linha do DataFrame
 new_columns = ['B2', 'B3', 'B4', 'B5', 'B8', 'B11', 
@@ -98,16 +92,19 @@ new_columns = ['B2', 'B3', 'B4', 'B5', 'B8', 'B11',
                'Image_Date']
 df[new_columns] = df.apply(extract_bands_and_indices, axis=1)
 
-# Adicionar colunas para mês e estação
-df['Month'] = df['DATA'].dt.month
-df['Season'] = (df['DATA'].dt.month % 12 + 3) // 3
+# Remover linhas sem dados de imagem (valores nulos)
+df_train = df.dropna(subset=new_columns, how='all')
 
-# Imprimir informações sobre o dataset
-print(f"Número de amostras no dataset: {len(df)}")
-print(f"Colunas no dataset: {df.columns.tolist()}")
+# Adicionar colunas para mês e estação
+df_train['Month'] = df_train['DATA'].dt.month
+df_train['Season'] = (df_train['DATA'].dt.month % 12 + 3) // 3
+
+# Imprimir informações sobre o dataset de treinamento
+print(f"Número de amostras no dataset de treinamento: {len(df_train)}")
+print(f"Colunas no dataset de treinamento: {df_train.columns.tolist()}")
 
 # Salvar o DataFrame para treinamento
-df.to_csv('../../sitsu_data/finished_processed_data/kinross_bandas_com_tolerancia_treino.csv', index=False)
+df_train.to_csv('../../sitsu_data/finished_processed_data/kinross_bandas_com_tolerancia_treino.csv', index=False)
 
-print(f"Arquivo de treino salvo com {len(df)} amostras e {len(df.columns)} colunas.")
-print(f"Colunas no arquivo de treino: {df.columns.tolist()}")
+print(f"Arquivo de treino salvo com {len(df_train)} amostras e {len(df_train.columns)} colunas.")
+print(f"Colunas no arquivo de treino: {df_train.columns.tolist()}")
