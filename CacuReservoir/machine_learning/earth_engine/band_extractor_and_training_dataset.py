@@ -14,7 +14,8 @@ Funcionalidade:
 3. Para cada ponto de amostra, busca a imagem de satélite mais próxima dentro de um intervalo de tempo.
 4. Extrai valores de bandas espectrais e calcula índices relevantes.
 5. Adiciona informações temporais (mês e estação) aos dados.
-6. Salva os dados processados em arquivos CSV para treinamento de modelos, incluindo apenas instâncias com imagens encontradas.
+6. Adiciona a porcentagem de nuvens para cada instância.
+7. Salva os dados processados em arquivos CSV para treinamento de modelos, incluindo apenas instâncias com imagens encontradas.
 """
 
 # Inicializar o Google Earth Engine
@@ -37,7 +38,7 @@ def extract_bands_and_indices(row):
         row (pd.Series): Uma linha do DataFrame contendo informações de um ponto de amostra.
     
     Returns:
-        pd.Series: Série com valores das bandas e índices calculados, ou pd.Series com valores nulos se nenhuma imagem for encontrada.
+        pd.Series: Série com valores das bandas, índices calculados e porcentagem de nuvens, ou pd.Series com valores nulos se nenhuma imagem for encontrada.
     """
     point = ee.Geometry.Point(row['Longitude'], row['Latitude'])
     date = ee.Date(row['DATA'].strftime('%Y-%m-%d'))
@@ -56,6 +57,7 @@ def extract_bands_and_indices(row):
     if collection.size().getInfo() > 0:
         image = collection.first()
         image_date = ee.Date(image.get('system:time_start')).format('YYYY-MM-dd').getInfo()
+        cloud_percentage = image.get('CLOUDY_PIXEL_PERCENTAGE').getInfo()
 
         try:
             # Extrair valores das bandas
@@ -76,20 +78,20 @@ def extract_bands_and_indices(row):
                 'B5': bands['B5'], 'B8': bands['B8'], 'B11': bands['B11'],
                 'NDCI': ndci, 'NDVI': ndvi, 'FAI': fai, 'MNDWI': mndwi, 
                 'B3_B2_ratio': b3_b2_ratio, 'B4_B3_ratio': b4_b3_ratio, 'B5_B4_ratio': b5_b4_ratio,
-                'Image_Date': image_date
+                'Image_Date': image_date, 'Cloud_Percentage': cloud_percentage
             })
         except Exception as e:
             print(f"Erro ao selecionar as bandas ou calcular índices para o ponto {row['PONTO']}: {e}")
-            return pd.Series({col: None for col in new_columns})
+            return pd.Series({col: None for col in new_columns + ['Cloud_Percentage']})
     else:
         print(f"Nenhuma imagem encontrada para o ponto {row['PONTO']} ({row['Latitude']}, {row['Longitude']}) no período de {start_date.format('YYYY-MM-dd').getInfo()} a {end_date.format('YYYY-MM-dd').getInfo()}")
-        return pd.Series({col: None for col in new_columns})
+        return pd.Series({col: None for col in new_columns + ['Cloud_Percentage']})
 
 # Aplicar a função extract_bands_and_indices a cada linha do DataFrame
 new_columns = ['B2', 'B3', 'B4', 'B5', 'B8', 'B11', 
                'NDCI', 'NDVI', 'FAI', 'MNDWI', 
                'B3_B2_ratio', 'B4_B3_ratio', 'B5_B4_ratio',
-               'Image_Date']
+               'Image_Date', 'Cloud_Percentage']
 df[new_columns] = df.apply(extract_bands_and_indices, axis=1)
 
 # Remover linhas sem dados de imagem (valores nulos)
