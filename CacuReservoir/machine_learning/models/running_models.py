@@ -332,6 +332,7 @@ if __name__ == "__main__":
         'Clorofila a',
         'Transparência da Água',
         'Sólidos Dissolvidos Totais',
+        'Turbidez'
     ]
     # Train all models
     results = train_all_parameters(file_path, parameters)

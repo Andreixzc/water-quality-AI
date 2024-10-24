@@ -16,7 +16,8 @@ colunas_para_manter = [
     'Sólidos Dissolvidos Totais', 
     'Sólidos Sedimentáveis', 
     'Sólidos Suspensos Totais', 
-    'Sólidos Totais'
+    'Sólidos Totais',
+    'Turbidez'
 ]
 
 
