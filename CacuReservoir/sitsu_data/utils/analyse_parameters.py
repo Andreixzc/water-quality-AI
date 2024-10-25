@@ -2,69 +2,105 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import numpy as np
+import unicodedata
 
-# Create a directory to store the analysis results
-output_dir = "../sitsu_data_analysis"
-os.makedirs(output_dir, exist_ok=True)
+def remove_accents(text):
+    """Remove acentos e caracteres especiais do texto."""
+    text = unicodedata.normalize('NFKD', text)
+    text = text.encode('ASCII', 'ignore').decode('ASCII')
+    return text
 
-# Read the dataset
-data = pd.read_csv("../finished_processed_data/Base_kinross_filtered_parameters_updated.csv")
+def sanitize_filename(name):
+    """Sanitiza o nome do arquivo removendo caracteres especiais e acentos."""
+    name = remove_accents(name)
+    name = name.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '_')
+    return name.lower()  # Converter para minúsculas para maior consistência
 
-# Save the first few rows of the dataset to a file
-with open(os.path.join(output_dir, "dataset_head.txt"), "w") as file:
-    file.write("First few rows of the dataset:\n")
-    file.write(data.head().to_string(index=False))
+def analyze_dataset():
+    # Criar diretório para as figuras
+    figures_dir = "figures"
+    os.makedirs(figures_dir, exist_ok=True)
 
-# Get the column names
-columns = data.columns.tolist()
+    # Configuração dos gráficos
+    sns.set_theme(style="whitegrid")
+    plt.rcParams['figure.figsize'] = [12, 6]
 
-# Exclude non-parameter columns
-exclude_columns = ["PONTO", "DATA", "Latitude", "Longitude"]
-parameters = [col for col in columns if col not in exclude_columns]
+    # Ler o dataset
+    data = pd.read_csv("../finished_processed_data/Base_kinross_filtered_parameters_updated.csv")
 
-# Analyze each parameter
-for param in parameters:
-    # Create a directory for each parameter
-    param_dir = os.path.join(output_dir, param)
-    os.makedirs(param_dir, exist_ok=True)
-    
-    # Check for missing values and save to a file
-    missing_values = data[param].isnull().sum()
-    with open(os.path.join(param_dir, "missing_values.txt"), "w") as file:
-        file.write(f"Missing values: {missing_values}\n")
-    
-    # Calculate total average and save to a file
-    total_avg = data[param].mean()
-    with open(os.path.join(param_dir, "total_average.txt"), "w") as file:
-        file.write(f"Total average: {total_avg:.2f}\n")
-    
-    # Calculate average by sampling point and save to a file
-    avg_by_point = data.groupby("PONTO")[param].mean()
-    avg_by_point.to_csv(os.path.join(param_dir, "average_by_point.csv"), index=True)
-    
-    # Plot distribution and save to a file
-    plt.figure(figsize=(8, 6))
-    sns.histplot(data[param], kde=True)
-    plt.title(f"Distribution of {param}")
-    plt.xlabel(param)
-    plt.ylabel("Frequency")
-    plt.savefig(os.path.join(param_dir, "distribution.png"))
+    # Definir parâmetros para análise
+    exclude_columns = ["PONTO", "DATA", "Latitude", "Longitude"]
+    parameters = [col for col in data.columns if col not in exclude_columns]
+
+    # Gerar estatísticas descritivas
+    desc_stats = data[parameters].describe()
+    desc_stats.to_csv(os.path.join(figures_dir, 'descriptive_statistics.csv'))
+
+    # Analisar cada parâmetro
+    for param in parameters:
+        print(f"Processando: {param}")
+        safe_name = sanitize_filename(param)
+        param_display = remove_accents(param)  # Para títulos dos gráficos
+
+        # Distribuição
+        plt.figure()
+        sns.histplot(data[param], kde=True, bins=30)
+        plt.title(f"Distribuicao de {param_display}", pad=20, fontsize=12)
+        plt.xlabel(param_display, fontsize=10)
+        plt.ylabel("Frequencia", fontsize=10)
+        plt.savefig(os.path.join(figures_dir, f"dist_{safe_name}.png"), 
+                    bbox_inches='tight', dpi=300)
+        plt.close()
+
+        # Boxplot
+        plt.figure(figsize=(14, 6))
+        sns.boxplot(x="PONTO", y=param, data=data)
+        plt.title(f"Boxplot de {param_display} por Ponto de Amostragem", pad=20, fontsize=12)
+        plt.xlabel("Ponto de Amostragem", fontsize=10)
+        plt.ylabel(param_display, fontsize=10)
+        plt.xticks(rotation=45)
+        plt.savefig(os.path.join(figures_dir, f"box_{safe_name}.png"), 
+                    bbox_inches='tight', dpi=300)
+        plt.close()
+
+        # Salvar estatísticas por ponto de amostragem
+        point_stats = data.groupby("PONTO")[param].describe()
+        point_stats.to_csv(os.path.join(figures_dir, f"{safe_name}_by_point.csv"))
+
+    # Matriz de correlação
+    plt.figure(figsize=(12, 10))
+    corr_matrix = data[parameters].corr()
+    mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+    sns.heatmap(corr_matrix, 
+                mask=mask,
+                annot=True, 
+                cmap="coolwarm", 
+                fmt=".2f",
+                square=True,
+                linewidths=0.5,
+                cbar_kws={"shrink": .5})
+    plt.title("Matriz de Correlacao entre Parametros", pad=20, fontsize=12)
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    plt.tight_layout()
+    plt.savefig(os.path.join(figures_dir, "correlation_matrix.png"), 
+                bbox_inches='tight', dpi=300)
     plt.close()
-    
-    # Plot boxplot by sampling point and save to a file
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x="PONTO", y=param, data=data)
-    plt.title(f"Boxplot of {param} by Sampling Point")
-    plt.xlabel("Sampling Point")
-    plt.ylabel(param)
-    plt.xticks(rotation=45)
-    plt.savefig(os.path.join(param_dir, "boxplot.png"))
-    plt.close()
 
-# Correlation matrix
-corr_matrix = data[parameters].corr()
-plt.figure(figsize=(10, 8))
-sns.heatmap(corr_matrix, annot=True, cmap="coolwarm")
-plt.title("Correlation Matrix")
-plt.savefig(os.path.join(output_dir, "correlation_matrix.png"))
-plt.close()
+    # Salvar matriz de correlação em CSV
+    corr_matrix.to_csv(os.path.join(figures_dir, 'correlation_matrix.csv'))
+
+    # Salvar informações básicas do dataset
+    dataset_info = {
+        'total_samples': len(data),
+        'total_columns': len(data.columns),
+        'date_range': [data['DATA'].min(), data['DATA'].max()],
+        'sampling_points': len(data['PONTO'].unique()),
+        'parameters': len(parameters)
+    }
+    
+    pd.DataFrame([dataset_info]).to_csv(os.path.join(figures_dir, 'dataset_info.csv'))
+
+if __name__ == "__main__":
+    analyze_dataset()
