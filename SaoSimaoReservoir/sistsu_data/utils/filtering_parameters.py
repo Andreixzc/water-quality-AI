@@ -1,0 +1,1 @@
+#Clorofila a,Turbidez,Sólidos Dissolvidos Totais,Sólidos Sedimentáveis,Sólidos Suspensos Totais,Sólidos Totais,ponto,data,Transparência
