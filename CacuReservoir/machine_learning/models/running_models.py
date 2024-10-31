@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.linear_model import LassoCV, RidgeCV
 from sklearn.svm import SVR
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.impute import SimpleImputer
@@ -147,6 +147,7 @@ class WaterQualityMultiModel:
                 # Calculate metrics
                 metrics = {
                     'rmse': np.sqrt(mean_squared_error(y_test, y_pred)),
+                    'mae': mean_absolute_error(y_test, y_pred),
                     'r2': r2_score(y_test, y_pred),
                     'cv_scores': cross_val_score(model, X_train_scaled, y_train, cv=5, scoring='r2')
                 }
@@ -192,6 +193,7 @@ class WaterQualityMultiModel:
             metrics = {
                 'model': model_name,
                 'rmse': model_data['metrics']['rmse'],
+                'mae': model_data['metrics']['mae'],
                 'r2': model_data['metrics']['r2'],
                 'cv_mean': model_data['metrics']['cv_scores'].mean(),
                 'cv_std': model_data['metrics']['cv_scores'].std()
@@ -230,10 +232,11 @@ class WaterQualityMultiModel:
             comparison_data.append({
                 'Model': model_name,
                 'R2 Score': model_data['metrics']['r2'],
-                'RMSE': model_data['metrics']['rmse']
+                'RMSE': model_data['metrics']['rmse'],
+                'MAE': model_data['metrics']['mae']
             })
         comparison_df = pd.DataFrame(comparison_data)
-        comparison_df.plot(x='Model', y=['R2 Score', 'RMSE'], kind='bar', ax=ax1)
+        comparison_df.plot(x='Model', y=['R2 Score', 'RMSE', 'MAE'], kind='bar', ax=ax1)
         ax1.set_title(f'Model Performance Comparison - {target_variable}')
         ax1.grid(True)
         
@@ -347,5 +350,6 @@ if __name__ == "__main__":
             print(f"\n{model_name}:")
             print(f"R2 Score: {model_data['metrics']['r2']:.4f}")
             print(f"RMSE: {model_data['metrics']['rmse']:.4f}")
+            print(f"MAE: {model_data['metrics']['mae']:.4f}")
             print(f"CV Score: {model_data['metrics']['cv_scores'].mean():.4f} "
                   f"(+/- {model_data['metrics']['cv_scores'].std()*2:.4f})")
