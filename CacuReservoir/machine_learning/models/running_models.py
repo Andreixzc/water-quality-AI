@@ -178,14 +178,17 @@ class WaterQualityMultiModel:
 
     def save_results(self, results, scaler, target_variable):
         """
-        Save all models and their results
+        Save all models and their results with parameter-specific names
         """
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        results_path = self.model_dir / f"{target_variable.replace(' ', '_')}_{timestamp}"
+        # Clean target variable name for file naming
+        clean_target = target_variable.replace(' ', '_').replace('á', 'a').lower()
+        results_path = self.model_dir / f"{clean_target}_{timestamp}"
         results_path.mkdir(parents=True, exist_ok=True)
         
-        # Save scaler
-        joblib.dump(scaler, results_path / 'scaler.joblib')
+        # Save scaler with parameter name
+        scaler_filename = f'scaler_{clean_target}.joblib'
+        joblib.dump(scaler, results_path / scaler_filename)
         
         # Create comparison metrics
         comparison_metrics = []
@@ -200,19 +203,22 @@ class WaterQualityMultiModel:
             }
             comparison_metrics.append(metrics)
             
-            # Save individual model
+            # Save individual model with parameter name
             model_path = results_path / model_name
             model_path.mkdir(parents=True, exist_ok=True)
             
-            # Save model
-            joblib.dump(model_data['model'], model_path / 'model.joblib')
+            # Create model filename with parameter name
+            model_filename = f'{clean_target}_{model_name.lower()}_model.joblib'
+            joblib.dump(model_data['model'], model_path / model_filename)
             
             # Save feature importance if available
             if model_data['feature_importance'] is not None:
-                model_data['feature_importance'].to_csv(model_path / 'feature_importance.csv', index=False)
+                importance_filename = f'{clean_target}_{model_name.lower()}_feature_importance.csv'
+                model_data['feature_importance'].to_csv(model_path / importance_filename, index=False)
         
-        # Save comparison metrics
-        pd.DataFrame(comparison_metrics).to_csv(results_path / 'model_comparison.csv', index=False)
+        # Save comparison metrics with parameter name
+        comparison_filename = f'{clean_target}_model_comparison.csv'
+        pd.DataFrame(comparison_metrics).to_csv(results_path / comparison_filename, index=False)
         
         self.logger.info(f"Results saved to {results_path}")
         return results_path
@@ -258,7 +264,7 @@ class WaterQualityMultiModel:
         ax2.legend()
         ax2.grid(True)
         
-        # 3. Feature Importance Comparison (for models that support it)
+        # 3. Feature Importance Comparison
         ax3 = fig.add_subplot(gs[1, 1])
         feature_importance_data = []
         for model_name, model_data in results.items():
@@ -290,8 +296,10 @@ class WaterQualityMultiModel:
         ax4.set_title('Cross-validation Score Distribution')
         ax4.grid(True)
         
+        # Save plot with parameter name
+        clean_target = target_variable.replace(' ', '_').replace('á', 'a').lower()
         plt.tight_layout()
-        plt.savefig(save_path / 'model_comparison.png')
+        plt.savefig(save_path / f'{clean_target}_model_comparison.png')
         plt.close()
 
 def train_all_parameters(file_path, parameters, cloud_threshold=10):
