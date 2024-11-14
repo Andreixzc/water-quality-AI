@@ -1,7 +1,0 @@
-First few rows of the dataset:
- PONTO       DATA  Clorofila a  Transparência da Água  Sólidos Dissolvidos  Sólidos Dissolvidos Totais  Sólidos Sedimentáveis  Sólidos Suspensos Totais  Sólidos Totais   Latitude  Longitude
-CLA-01 2018-01-01          0.9                    NaN                 12.0                         NaN                    NaN                       NaN             NaN -18.404715 -51.222877
-CLA-02 2018-01-01          1.3                    NaN                 11.0                         NaN                    NaN                       NaN             NaN -18.478621 -51.188608
-CLA-03 2018-01-01          2.4                    NaN                  8.0                         NaN                    NaN                       NaN             NaN -18.528219 -51.151919
-CLA-04 2018-01-01          0.0                    NaN                 60.0                         NaN                    NaN                       NaN             NaN -18.555668 -51.127286
-CLA-05 2018-01-01          1.1                    NaN                 56.0                         NaN                    NaN                       NaN             NaN -18.555776 -51.127229
