@@ -1,0 +1,112 @@
+2025-02-25 20:59:56,038 - INFO - Loading data from ./water_quality_with_bands_filtered_20250225_204115.csv
+2025-02-25 20:59:56,042 - INFO - Loaded dataset with 579 rows and 22 columns
+2025-02-25 20:59:56,042 - INFO - Dataset columns: ['latitude', 'longitude', 'turbidez', 'clorofila', 'data', 'B2', 'B3', 'B4', 'B5', 'B8', 'B11', 'NDCI', 'NDVI', 'FAI', 'MNDWI', 'B3_B2_ratio', 'B4_B3_ratio', 'B5_B4_ratio', 'Image_Date', 'Cloud_Percentage', 'Month', 'Season']
+2025-02-25 20:59:56,042 - INFO - Dataset shape: (579, 22)
+2025-02-25 20:59:56,043 - INFO - Training models for parameters: ['turbidez', 'clorofila']
+2025-02-25 20:59:56,043 - INFO - 
+==================================================
+Training models for turbidez
+==================================================
+2025-02-25 20:59:56,043 - INFO - Preprocessing data for turbidez with cloud threshold 20%
+2025-02-25 20:59:56,043 - INFO - Removed 11 samples with cloud percentage > 20%
+2025-02-25 20:59:56,045 - INFO - Removed 135 samples with missing turbidez values
+2025-02-25 20:59:56,046 - INFO - Removed 59 outlier samples for turbidez
+2025-02-25 20:59:56,047 - INFO - turbidez statistics: min=0.0, max=14.4, mean=4.368208556149733, median=3.535
+2025-02-25 20:59:56,052 - INFO - Preprocessed dataset size: 374 samples with 15 features
+2025-02-25 20:59:56,052 - INFO - Training models on 374 samples with 15 features
+2025-02-25 20:59:56,053 - INFO - Train set: 299 samples, Test set: 75 samples
+2025-02-25 20:59:56,056 - INFO - Training RandomForest model...
+2025-02-25 20:59:57,014 - INFO - RandomForest Performance - RMSE: 2.1826, MAE: 1.2612, R²: 0.4620, CV R²: 0.3459 (±0.2886)
+2025-02-25 20:59:57,028 - INFO - Top 5 important features for RandomForest:
+2025-02-25 20:59:57,028 - INFO -   1. FAI: 0.1580
+2025-02-25 20:59:57,028 - INFO -   2. B4: 0.1519
+2025-02-25 20:59:57,028 - INFO -   3. B3_B2_ratio: 0.1106
+2025-02-25 20:59:57,028 - INFO -   4. B3: 0.1046
+2025-02-25 20:59:57,028 - INFO -   5. Month: 0.0830
+2025-02-25 20:59:57,029 - INFO - Training GradientBoosting model...
+2025-02-25 20:59:57,555 - INFO - GradientBoosting Performance - RMSE: 2.3244, MAE: 1.4069, R²: 0.3898, CV R²: 0.2539 (±0.3057)
+2025-02-25 20:59:57,556 - INFO - Top 5 important features for GradientBoosting:
+2025-02-25 20:59:57,557 - INFO -   1. B4: 0.2034
+2025-02-25 20:59:57,557 - INFO -   2. FAI: 0.1120
+2025-02-25 20:59:57,557 - INFO -   3. B3_B2_ratio: 0.1120
+2025-02-25 20:59:57,557 - INFO -   4. Month: 0.1004
+2025-02-25 20:59:57,557 - INFO -   5. B11: 0.0706
+2025-02-25 20:59:57,557 - INFO - Training Lasso model...
+2025-02-25 20:59:57,976 - INFO - Lasso Performance - RMSE: 2.6669, MAE: 2.0785, R²: 0.1967, CV R²: 0.1021 (±0.2526)
+2025-02-25 20:59:57,976 - INFO - Training Ridge model...
+2025-02-25 20:59:58,105 - INFO - Ridge Performance - RMSE: 2.6814, MAE: 2.1107, R²: 0.1880, CV R²: 0.0108 (±0.6206)
+2025-02-25 20:59:58,105 - INFO - Training SVR model...
+2025-02-25 20:59:58,134 - INFO - SVR Performance - RMSE: 2.5754, MAE: 1.7727, R²: 0.2509, CV R²: 0.1481 (±0.0656)
+2025-02-25 20:59:58,135 - INFO - Saving results to tres_marias_models/turbidez_20250225_205958
+2025-02-25 20:59:58,178 - INFO - Results saved to tres_marias_models/turbidez_20250225_205958
+2025-02-25 20:59:58,178 - INFO - Creating comparison plots for turbidez
+2025-02-25 21:00:00,029 - INFO - Saved comparison plots to tres_marias_models/turbidez_20250225_205958/turbidez_model_comparison.png
+2025-02-25 21:00:00,029 - INFO - Completed training for turbidez
+2025-02-25 21:00:00,029 - INFO - 
+==================================================
+Training models for clorofila
+==================================================
+2025-02-25 21:00:00,029 - INFO - Preprocessing data for clorofila with cloud threshold 20%
+2025-02-25 21:00:00,030 - INFO - Removed 11 samples with cloud percentage > 20%
+2025-02-25 21:00:00,031 - INFO - Removed 410 samples with missing clorofila values
+2025-02-25 21:00:00,032 - INFO - Removed 11 outlier samples for clorofila
+2025-02-25 21:00:00,032 - INFO - clorofila statistics: min=1.0, max=3.2, mean=1.3640068027210885, median=1.07
+2025-02-25 21:00:00,036 - INFO - Preprocessed dataset size: 147 samples with 15 features
+2025-02-25 21:00:00,036 - INFO - Training models on 147 samples with 15 features
+2025-02-25 21:00:00,037 - INFO - Train set: 117 samples, Test set: 30 samples
+2025-02-25 21:00:00,039 - INFO - Training RandomForest model...
+2025-02-25 21:00:00,576 - INFO - RandomForest Performance - RMSE: 0.5566, MAE: 0.3341, R²: 0.2102, CV R²: 0.0520 (±0.6530)
+2025-02-25 21:00:00,582 - INFO - Top 5 important features for RandomForest:
+2025-02-25 21:00:00,583 - INFO -   1. NDVI: 0.2250
+2025-02-25 21:00:00,583 - INFO -   2. B2: 0.1310
+2025-02-25 21:00:00,583 - INFO -   3. MNDWI: 0.0966
+2025-02-25 21:00:00,583 - INFO -   4. B4_B3_ratio: 0.0879
+2025-02-25 21:00:00,583 - INFO -   5. B3_B2_ratio: 0.0693
+2025-02-25 21:00:00,583 - INFO - Training GradientBoosting model...
+2025-02-25 21:00:00,941 - INFO - GradientBoosting Performance - RMSE: 0.5955, MAE: 0.2926, R²: 0.0961, CV R²: -0.0231 (±0.7422)
+2025-02-25 21:00:00,943 - INFO - Top 5 important features for GradientBoosting:
+2025-02-25 21:00:00,943 - INFO -   1. NDVI: 0.2965
+2025-02-25 21:00:00,943 - INFO -   2. B2: 0.1350
+2025-02-25 21:00:00,943 - INFO -   3. MNDWI: 0.1185
+2025-02-25 21:00:00,943 - INFO -   4. FAI: 0.0719
+2025-02-25 21:00:00,943 - INFO -   5. B3_B2_ratio: 0.0711
+2025-02-25 21:00:00,943 - INFO - Training Lasso model...
+2025-02-25 21:00:01,747 - INFO - Lasso Performance - RMSE: 0.6271, MAE: 0.4762, R²: -0.0023, CV R²: -0.1138 (±0.1915)
+2025-02-25 21:00:01,747 - INFO - Training Ridge model...
+2025-02-25 21:00:01,870 - INFO - Ridge Performance - RMSE: 0.6064, MAE: 0.4563, R²: 0.0627, CV R²: -0.2027 (±0.3664)
+2025-02-25 21:00:01,870 - INFO - Training SVR model...
+2025-02-25 21:00:01,881 - INFO - SVR Performance - RMSE: 0.6208, MAE: 0.3582, R²: 0.0176, CV R²: -0.0647 (±0.1826)
+2025-02-25 21:00:01,881 - INFO - Saving results to tres_marias_models/clorofila_20250225_210001
+2025-02-25 21:00:01,913 - INFO - Results saved to tres_marias_models/clorofila_20250225_210001
+2025-02-25 21:00:01,914 - INFO - Creating comparison plots for clorofila
+2025-02-25 21:00:03,529 - INFO - Saved comparison plots to tres_marias_models/clorofila_20250225_210001/clorofila_model_comparison.png
+2025-02-25 21:00:03,529 - INFO - Completed training for clorofila
+2025-02-25 21:00:03,529 - INFO - 
+
+============================== TRAINING SUMMARY ==============================
+2025-02-25 21:00:03,529 - INFO - 
+turbidez:
+2025-02-25 21:00:03,529 - INFO - Results saved to: tres_marias_models/turbidez_20250225_205958
+2025-02-25 21:00:03,529 - INFO - 
+Model Performance:
+2025-02-25 21:00:03,529 - INFO - Best model for turbidez: RandomForest (R² = 0.4620)
+2025-02-25 21:00:03,532 - INFO - 
+           Model     R²   RMSE    MAE           CV R²
+    RandomForest 0.4620 2.1826 1.2612 0.3459 ± 0.2886
+GradientBoosting 0.3898 2.3244 1.4069 0.2539 ± 0.3057
+           Lasso 0.1967 2.6669 2.0785 0.1021 ± 0.2526
+           Ridge 0.1880 2.6814 2.1107 0.0108 ± 0.6206
+             SVR 0.2509 2.5754 1.7727 0.1481 ± 0.0656
+2025-02-25 21:00:03,532 - INFO - 
+clorofila:
+2025-02-25 21:00:03,532 - INFO - Results saved to: tres_marias_models/clorofila_20250225_210001
+2025-02-25 21:00:03,532 - INFO - 
+Model Performance:
+2025-02-25 21:00:03,532 - INFO - Best model for clorofila: RandomForest (R² = 0.2102)
+2025-02-25 21:00:03,533 - INFO - 
+           Model      R²   RMSE    MAE            CV R²
+    RandomForest  0.2102 0.5566 0.3341  0.0520 ± 0.6530
+GradientBoosting  0.0961 0.5955 0.2926 -0.0231 ± 0.7422
+           Lasso -0.0023 0.6271 0.4762 -0.1138 ± 0.1915
+           Ridge  0.0627 0.6064 0.4563 -0.2027 ± 0.3664
+             SVR  0.0176 0.6208 0.3582 -0.0647 ± 0.1826
