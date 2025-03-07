@@ -1,0 +1,15 @@
+NDVI
+B2
+B3_B2_ratio
+B4_B3_ratio
+Month
+MNDWI
+MNDWI_squared
+B11
+B8
+B3_B5_ratio
+B4_B5_ratio
+NDCI_squared
+FAI
+B3
+B4

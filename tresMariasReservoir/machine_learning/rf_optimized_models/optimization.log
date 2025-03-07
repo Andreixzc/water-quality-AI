@@ -1,0 +1,92 @@
+2025-02-26 16:33:24,531 - INFO - Starting optimization for turbidez
+2025-02-26 16:33:24,535 - INFO - Loaded dataset with 579 rows and 22 columns
+2025-02-26 16:33:24,536 - INFO - Preprocessing data for turbidez with cloud threshold 20%
+2025-02-26 16:33:24,541 - INFO - Removed 11 samples with cloud percentage > 20%
+2025-02-26 16:33:24,546 - INFO - Removed 135 samples with missing turbidez values
+2025-02-26 16:33:24,552 - INFO - Removed 59 outlier samples for turbidez
+2025-02-26 16:33:24,553 - INFO - turbidez statistics: min=0.0000, max=14.4000, mean=4.3682, median=3.5350
+2025-02-26 16:33:24,557 - INFO - Imputing missing values...
+2025-02-26 16:33:24,569 - INFO - Preprocessed dataset size: 374 samples with 19 features
+2025-02-26 16:33:24,570 - INFO - Train set: 299 samples, Test set: 75 samples
+2025-02-26 16:33:24,570 - INFO - Analyzing feature importance...
+2025-02-26 16:33:24,886 - INFO - Top 10 features by importance:
+2025-02-26 16:33:24,887 - INFO -   1. FAI: 0.1450
+2025-02-26 16:33:24,887 - INFO -   2. B4: 0.1441
+2025-02-26 16:33:24,888 - INFO -   3. B3_B2_ratio: 0.1076
+2025-02-26 16:33:24,888 - INFO -   4. B3: 0.0969
+2025-02-26 16:33:24,888 - INFO -   5. Month: 0.0776
+2025-02-26 16:33:24,888 - INFO -   6. B2: 0.0564
+2025-02-26 16:33:24,889 - INFO -   7. NDCI_squared: 0.0531
+2025-02-26 16:33:24,889 - INFO -   8. NDVI: 0.0425
+2025-02-26 16:33:24,889 - INFO -   9. B5: 0.0383
+2025-02-26 16:33:24,890 - INFO -   10. B4_B3_ratio: 0.0341
+2025-02-26 16:33:24,890 - INFO - Calculating permutation importance (this may take a while)...
+2025-02-26 16:33:26,552 - INFO - Top 10 features by permutation importance:
+2025-02-26 16:33:26,552 - INFO -   1. FAI: 0.2073 ± 0.0190
+2025-02-26 16:33:26,552 - INFO -   2. B4: 0.1798 ± 0.0211
+2025-02-26 16:33:26,553 - INFO -   3. Month: 0.1484 ± 0.0158
+2025-02-26 16:33:26,553 - INFO -   4. B3_B2_ratio: 0.1408 ± 0.0154
+2025-02-26 16:33:26,553 - INFO -   5. B3: 0.0797 ± 0.0047
+2025-02-26 16:33:26,553 - INFO -   6. NDCI_squared: 0.0609 ± 0.0069
+2025-02-26 16:33:26,554 - INFO -   7. B2: 0.0542 ± 0.0102
+2025-02-26 16:33:26,554 - INFO -   8. NDVI: 0.0331 ± 0.0026
+2025-02-26 16:33:26,555 - INFO -   9. B5: 0.0275 ± 0.0053
+2025-02-26 16:33:26,555 - INFO -   10. B4_B3_ratio: 0.0243 ± 0.0021
+2025-02-26 16:33:26,555 - INFO - Selecting best features...
+2025-02-26 16:33:26,556 - INFO - Selected 14 features out of 19
+2025-02-26 16:33:26,557 - INFO - Selected features: FAI, B4, Month, B3_B2_ratio, B3, NDCI_squared, B2, NDVI, B5, B4_B3_ratio, B4_B5_ratio, B3_B5_ratio, B11, B8
+2025-02-26 16:33:26,558 - INFO - Optimizing Random Forest hyperparameters...
+2025-02-26 16:33:33,906 - INFO - RandomizedSearchCV completed in 7.35 seconds
+2025-02-26 16:33:33,906 - INFO - Best parameters: {'n_estimators': 300, 'min_samples_split': 5, 'min_samples_leaf': 2, 'max_features': 'sqrt', 'max_depth': 40, 'bootstrap': True}
+2025-02-26 16:33:33,906 - INFO - Best CV score: 0.3498
+2025-02-26 16:33:34,211 - INFO - Evaluating model on test data...
+2025-02-26 16:33:34,225 - INFO - Test metrics - RMSE: 2.1648, MAE: 1.3417, R²: 0.4707
+2025-02-26 16:33:34,225 - INFO - Error statistics - Mean: 0.0373, Std: 2.1645
+2025-02-26 16:33:34,226 - INFO - Saving model and results to rf_optimized_models\optimized_rf_turbidez_20250226_163334
+2025-02-26 16:33:34,311 - INFO - Creating visualizations...
+2025-02-26 16:33:37,905 - INFO - Starting optimization for clorofila
+2025-02-26 16:33:37,909 - INFO - Loaded dataset with 579 rows and 22 columns
+2025-02-26 16:33:37,909 - INFO - Preprocessing data for clorofila with cloud threshold 20%
+2025-02-26 16:33:37,910 - INFO - Removed 11 samples with cloud percentage > 20%
+2025-02-26 16:33:37,913 - INFO - Removed 410 samples with missing clorofila values
+2025-02-26 16:33:37,914 - INFO - Removed 11 outlier samples for clorofila
+2025-02-26 16:33:37,916 - INFO - clorofila statistics: min=1.0000, max=3.2000, mean=1.3640, median=1.0700
+2025-02-26 16:33:37,918 - INFO - Imputing missing values...
+2025-02-26 16:33:37,926 - INFO - Preprocessed dataset size: 147 samples with 19 features
+2025-02-26 16:33:37,926 - INFO - Train set: 117 samples, Test set: 30 samples
+2025-02-26 16:33:37,927 - INFO - Analyzing feature importance...
+2025-02-26 16:33:38,077 - INFO - Top 10 features by importance:
+2025-02-26 16:33:38,078 - INFO -   1. NDVI: 0.2131
+2025-02-26 16:33:38,079 - INFO -   2. B2: 0.1205
+2025-02-26 16:33:38,079 - INFO -   3. B4_B3_ratio: 0.0752
+2025-02-26 16:33:38,080 - INFO -   4. B3_B2_ratio: 0.0669
+2025-02-26 16:33:38,080 - INFO -   5. Month: 0.0577
+2025-02-26 16:33:38,080 - INFO -   6. MNDWI: 0.0509
+2025-02-26 16:33:38,080 - INFO -   7. B3_B5_ratio: 0.0486
+2025-02-26 16:33:38,081 - INFO -   8. B11: 0.0459
+2025-02-26 16:33:38,081 - INFO -   9. B8: 0.0446
+2025-02-26 16:33:38,082 - INFO -   10. B4_B5_ratio: 0.0411
+2025-02-26 16:33:38,082 - INFO - Calculating permutation importance (this may take a while)...
+2025-02-26 16:33:39,161 - INFO - Top 10 features by permutation importance:
+2025-02-26 16:33:39,162 - INFO -   1. NDVI: 0.3113 ± 0.0193
+2025-02-26 16:33:39,163 - INFO -   2. B2: 0.1220 ± 0.0130
+2025-02-26 16:33:39,163 - INFO -   3. B3_B2_ratio: 0.0884 ± 0.0075
+2025-02-26 16:33:39,163 - INFO -   4. B4_B3_ratio: 0.0870 ± 0.0078
+2025-02-26 16:33:39,164 - INFO -   5. Month: 0.0582 ± 0.0149
+2025-02-26 16:33:39,164 - INFO -   6. MNDWI: 0.0570 ± 0.0059
+2025-02-26 16:33:39,164 - INFO -   7. MNDWI_squared: 0.0570 ± 0.0051
+2025-02-26 16:33:39,164 - INFO -   8. B11: 0.0458 ± 0.0047
+2025-02-26 16:33:39,165 - INFO -   9. B8: 0.0444 ± 0.0033
+2025-02-26 16:33:39,165 - INFO -   10. B3_B5_ratio: 0.0397 ± 0.0041
+2025-02-26 16:33:39,165 - INFO - Selecting best features...
+2025-02-26 16:33:39,166 - INFO - Selected 15 features out of 19
+2025-02-26 16:33:39,167 - INFO - Selected features: NDVI, B2, B3_B2_ratio, B4_B3_ratio, Month, MNDWI, MNDWI_squared, B11, B8, B3_B5_ratio, B4_B5_ratio, NDCI_squared, FAI, B3, B4
+2025-02-26 16:33:39,168 - INFO - Optimizing Random Forest hyperparameters...
+2025-02-26 16:33:42,648 - INFO - RandomizedSearchCV completed in 3.48 seconds
+2025-02-26 16:33:42,649 - INFO - Best parameters: {'n_estimators': 500, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': 'log2', 'max_depth': 50, 'bootstrap': False}
+2025-02-26 16:33:42,649 - INFO - Best CV score: 0.1282
+2025-02-26 16:33:42,975 - INFO - Evaluating model on test data...
+2025-02-26 16:33:42,994 - INFO - Test metrics - RMSE: 0.5809, MAE: 0.3019, R²: 0.1399
+2025-02-26 16:33:42,994 - INFO - Error statistics - Mean: -0.0223, Std: 0.5805
+2025-02-26 16:33:42,995 - INFO - Saving model and results to rf_optimized_models\optimized_rf_clorofila_20250226_163342
+2025-02-26 16:33:43,125 - INFO - Creating visualizations...
